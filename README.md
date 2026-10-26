@@ -4,25 +4,26 @@ Small, opinionated skills for AI-assisted software engineering. Plain Markdown i
 
 ## Install
 
-Requires Git and [Node.js 22.20+](https://nodejs.org/). Run from the project where you want to use the skill:
+Requires Git and [Node.js 22.20+](https://nodejs.org/). Run from the project where you want to use a skill:
 
 ```sh
 npx skills add Vaalley/val-skills --skill evil-twin
+npx skills add Vaalley/val-skills --skill cold-start
 ```
 
-The [skills CLI](https://github.com/vercel-labs/skills) lets you choose the coding agents to install to. Add `-g` for a user-level installation across projects.
+The [skills CLI](https://github.com/vercel-labs/skills) lets you choose the coding agents to install to. Add `-g` for a user-level installation across projects, or omit `--skill` to select interactively.
 
 Choose a specific agent without prompts:
 
 ```sh
 # Claude Code
-npx skills add Vaalley/val-skills --skill evil-twin --agent claude-code -y
+npx skills add Vaalley/val-skills --skill <skill-name> --agent claude-code -y
 
 # Codex
-npx skills add Vaalley/val-skills --skill evil-twin --agent codex -y
+npx skills add Vaalley/val-skills --skill <skill-name> --agent codex -y
 ```
 
-Browse this collection as it grows:
+List available skills in the collection:
 
 ```sh
 npx skills add Vaalley/val-skills --list
@@ -32,14 +33,14 @@ The installer is third-party software. Inspect skills before enabling them; they
 
 ### omp
 
-For a native user-level omp installation, clone this repository and copy the skill into `~/.omp/agent/skills/`. No Node.js required for this route.
+For a native user-level omp installation, clone this repository and copy the skills you want into `~/.omp/agent/skills/` (or copy `val-skills/skills/*` to install all of them). No Node.js required for this route.
 
 macOS / Linux / Git Bash:
 
 ```sh
 git clone https://github.com/Vaalley/val-skills.git
 mkdir -p ~/.omp/agent/skills
-cp -R val-skills/skills/evil-twin ~/.omp/agent/skills/
+cp -R val-skills/skills/evil-twin val-skills/skills/cold-start ~/.omp/agent/skills/
 ```
 
 PowerShell:
@@ -47,14 +48,14 @@ PowerShell:
 ```powershell
 git clone https://github.com/Vaalley/val-skills.git
 New-Item -ItemType Directory -Force "$HOME/.omp/agent/skills" | Out-Null
-Copy-Item -Recurse -Force ./val-skills/skills/evil-twin "$HOME/.omp/agent/skills/"
+Copy-Item -Recurse -Force ./val-skills/skills/evil-twin, ./val-skills/skills/cold-start "$HOME/.omp/agent/skills/"
 ```
 
 These commands copy the current version. To update a copied skill, pull the repository and repeat the copy step. For other agents, you can likewise copy an individual skill folder into their documented skills directory.
 
-The commands above install `evil-twin`. Substitute `cold-start` for that name to install the onboarding skill instead.
-
 ## Skills
+
+Start a fresh agent session after installation so the skill can be discovered. Invocation syntax depends on your agent (`/skill-name` in Claude Code, `$skill-name` in Codex, `/skill:skill-name` in omp), or you can ask your agent to apply the skill by name.
 
 ### [evil-twin](skills/evil-twin/SKILL.md)
 
@@ -69,9 +70,7 @@ Evil Twin identifies your feature's promise, invents a relevant adversary, and r
 - Uses synthetic data and disposable local targets; checks for live backing services before exercising side effects.
 - Reports limitations honestly when execution is unavailable or nothing breaks.
 
-### Use it
-
-Start a fresh agent session after installation so the skill can be discovered. Invocation syntax depends on your agent:
+#### Use it
 
 ```text
 Claude Code: /evil-twin the checkout flow
@@ -94,7 +93,7 @@ Cold Start follows the documented setup in a disposable workspace, then exercise
 - Checks backing services before startup, migrations, or seeds; does not borrow personal credentials or touch live systems.
 - Separates success on the documented path from success requiring undocumented steps.
 
-### Use it
+#### Use it
 
 ```text
 Claude Code: /cold-start this repository
@@ -112,6 +111,8 @@ Each skill lives one level below `skills/`:
 
 ```text
 skills/
+  cold-start/
+    SKILL.md
   evil-twin/
     SKILL.md
   your-next-skill/
