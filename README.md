@@ -52,6 +52,8 @@ Copy-Item -Recurse -Force ./val-skills/skills/evil-twin "$HOME/.omp/agent/skills
 
 These commands copy the current version. To update a copied skill, pull the repository and repeat the copy step. For other agents, you can likewise copy an individual skill folder into their documented skills directory.
 
+The commands above install `evil-twin`. Substitute `cold-start` for that name to install the onboarding skill instead.
+
 ## Skills
 
 ### [evil-twin](skills/evil-twin/SKILL.md)
@@ -80,6 +82,29 @@ omp:         /skill:evil-twin the checkout flow
 Without a target, the skill uses your current task and related uncommitted changes. You can also ask your agent to use the `evil-twin` skill on a named feature.
 
 The report identifies the promise, demonstrated failure, reproduction steps, evidence, other attacks attempted, and execution limits. No finding is a valid outcome; it is not a guarantee of correctness or security.
+
+### [cold-start](skills/cold-start/SKILL.md)
+
+**Can a new contributor get this running with only what the project tells them?**
+
+Cold Start follows the documented setup in a disposable workspace, then exercises one meaningful first use. It reports observed blockers, hidden prerequisites, and workarounds that actually worked—not speculative documentation improvements.
+
+- Distinguishes a clean checkout from a fresh machine and records inherited tooling.
+- Leaves the source project unchanged; installs dependencies and tries bounded workarounds only in the disposable environment.
+- Checks backing services before startup, migrations, or seeds; does not borrow personal credentials or touch live systems.
+- Separates success on the documented path from success requiring undocumented steps.
+
+### Use it
+
+```text
+Claude Code: /cold-start this repository
+Codex:       $cold-start this repository
+omp:         /skill:cold-start this repository
+```
+
+Without a target, the skill uses the current project and its documented default onboarding path. Name a component or setup guide to narrow a monorepo run.
+
+The report records the starting environment, reproduction steps, observed first success or blocker, verified deviations, and cleanup. Tests or a running process alone do not prove the first-use workflow works.
 
 ## Add a skill
 
