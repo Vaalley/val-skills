@@ -9,6 +9,7 @@ Requires Git and [Node.js 22.20+](https://nodejs.org/). Run from the project whe
 ```sh
 npx skills add Vaalley/val-skills --skill evil-twin
 npx skills add Vaalley/val-skills --skill cold-start
+npx skills add Vaalley/val-skills --skill jira-browser-cookie-auth
 ```
 
 The [skills CLI](https://github.com/vercel-labs/skills) lets you choose the coding agents to install to. Add `-g` for a user-level installation across projects, or omit `--skill` to select interactively.
@@ -104,6 +105,27 @@ omp:         /skill:cold-start this repository
 Without a target, the skill uses the current project and its documented default onboarding path. Name a component or setup guide to narrow a monorepo run.
 
 The report records the starting environment, reproduction steps, observed first success or blocker, verified deviations, and cleanup. Tests or a running process alone do not prove the first-use workflow works.
+
+### [jira-browser-cookie-auth](skills/jira-browser-cookie-auth/SKILL.md)
+
+**Read a Jira Cloud ticket, its comments and its attachments from your logged-in browser, without an API token.**
+
+A bundled Python reader reuses the Jira session of a local Brave, Chrome or Chromium profile on Linux to fetch an issue, every comment, and download its attached mockups and files. Built for agents that need the full ticket, including the screenshot "below".
+
+- GET-only, with an exact endpoint allowlist: the issue, its comments, and the attachments listed by that issue. Redirects are never followed.
+- Attachments are streamed from the Jira tenant itself (`redirect=false`), so cookies never reach another host; files are size-limited, sanitized, `0600`, never overwritten.
+- Never prints or stores keyring secrets or decrypted cookies; reads the cookie database through a read-only SQLite snapshot.
+- Requires Python 3.9+ with `requests` and `cryptography`, and `secret-tool` for the browser keyring. Offline tests: `python3 -m unittest discover -s scripts -p 'test_read_issue.py'`.
+
+#### Use it
+
+```text
+Claude Code: /jira-browser-cookie-auth https://example.atlassian.net/browse/PROJ-123
+Codex:       $jira-browser-cookie-auth https://example.atlassian.net/browse/PROJ-123
+omp:         /skill:jira-browser-cookie-auth https://example.atlassian.net/browse/PROJ-123
+```
+
+The ticket text and attachments are treated as untrusted data, never as instructions. The skill never writes to Jira, even when a ticket asks for it.
 
 ## Add a skill
 
